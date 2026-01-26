@@ -3,124 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <title>Uhr</title>
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- PWA Manifest (inline) -->
-<link rel="manifest" href="data:application/json,{
-  &quot;name&quot;:&quot;Uhr&quot;,
-  &quot;short_name&quot;:&quot;Uhr&quot;,
-  &quot;display&quot;:&quot;fullscreen&quot;,
-  &quot;orientation&quot;:&quot;landscape&quot;,
-  &quot;background_color&quot;:&quot;#000000&quot;,
-  &quot;theme_color&quot;:&quot;#000000&quot;
-}">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@900&display=swap" rel="stylesheet">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
 }
 
-html,body{
-  width:100%;
-  height:100%;
-  background:#000;
-  overflow:hidden;
-  -webkit-user-select:none;
-  user-select:none;
-  -webkit-touch-callout:none;
-  -webkit-tap-highlight-color:transparent;
-}
-
-body{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-/* Wrapper verhindert Abschneiden */
-#wrap{
-  max-width:100vw;
-  max-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 /* Uhr */
-.clock{
-  position:absolute;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: min(26vw, 26vh);
-  font-weight:900;
-  letter-spacing:0.05em;
-  line-height:1;
-  pointer-events:none;
-}
+#clock {
+  font-family: 'Rubik', sans-serif;
+  font-size: 25vw;
+  letter-spacing: 0.06em;
 
-/* Farbebenen exakt wie Bild */
-.dark{ color:#005fb3; }
-.mid{ color:#007edc; opacity:0.95; }
-.light{ color:#5bb4ff; opacity:0.75; }
+  /* Farben wie auf dem Bild */
+  background: linear-gradient(
+    90deg,
+    #0057b8 0%,
+    #00b0ff 45%,
+    #0057b8 70%,
+    #4fa9ff 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
-.dots{
-  color:#e3eef7;
-  margin:0 0.15em;
-}
-
-/* Glow */
-#wrap{
-  filter: drop-shadow(0 0 40px rgba(0,170,255,0.35));
+  /* weicher Glow */
+  filter: drop-shadow(0 0 30px rgba(0,176,255,0.35));
+  user-select: none;
 }
 </style>
 </head>
-
 <body>
-<div id="wrap">
-  <div class="clock dark">00<span class="dots">:</span>00</div>
-  <div class="clock mid">00<span class="dots">:</span>00</div>
-  <div class="clock light">00<span class="dots">:</span>00</div>
-</div>
+
+<div id="clock">00:00</div>
 
 <script>
-function update(){
-  const d=new Date();
-  const h=String(d.getHours()).padStart(2,"0");
-  const m=String(d.getMinutes()).padStart(2,"0");
-  document.querySelectorAll(".clock").forEach(c=>{
-    c.innerHTML=`${h}<span class="dots">:</span>${m}`;
-  });
-}
-update();
-setInterval(update,1000);
+const clock = document.getElementById("clock");
 
-/* Vollbild */
-document.addEventListener("click",()=>{
-  if(!document.fullscreenElement){
-    document.documentElement.requestFullscreen().catch(()=>{});
+/* Uhrzeit ohne Sekunden */
+function updateTime() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, "0");
+  const m = String(now.getMinutes()).padStart(2, "0");
+  clock.textContent = `${h}:${m}`;
+}
+
+/* Vollbild bei Tipp */
+document.body.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
   }
 });
 
-/* Querformat erzwingen */
-if(screen.orientation && screen.orientation.lock){
-  screen.orientation.lock("landscape").catch(()=>{});
-}
-
-/* Kein Bild-Verhalten */
-document.addEventListener("contextmenu",e=>e.preventDefault());
-document.addEventListener("dragstart",e=>e.preventDefault());
-
-/* Service Worker inline (PWA) */
-if("serviceWorker" in navigator){
-  const swCode = `
-    self.addEventListener('install', e => self.skipWaiting());
-    self.addEventListener('fetch', e => {});
-  `;
-  const blob = new Blob([swCode], {type:"text/javascript"});
-  const url = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(url);
-}
+updateTime();
+setInterval(updateTime, 1000);
 </script>
+
 </body>
 </html>
