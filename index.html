@@ -42,21 +42,25 @@ body{
 
 .time{
   font-family:'Rubik', sans-serif;
-  font-size:34vw;        /* kleiner als vorher */
+  font-size:34vw;
   line-height:1;
   white-space:nowrap;
-  transform:scale(0.85); 
+  transform:scale(1.02);
   transform-origin:center;
   pointer-events:none;
+  display:flex;
+  align-items:center;
 }
 
-/* Farben exakt wie Bild */
-.layer1{ color:#003f87; }
-.layer2{ color:#0066cc; }
-.layer3{ color:#66b7ff; opacity:0.9; }
+/* Farben pro Ziffer (wie im Bild) */
+.d1{ color:#003f87; }
+.d2{ color:#005fbf; }
+.d3{ color:#0080ff; }
+.d4{ color:#66b7ff; }
 
-.dots{
+.colon{
   color:#eaf4ff;
+  padding:0 0.05em;
 }
 </style>
 </head>
@@ -64,9 +68,13 @@ body{
 <body>
 
 <div id="clock">
-  <div class="time layer1">00<span class="dots">:</span>00</div>
-  <div class="time layer2">00<span class="dots">:</span>00</div>
-  <div class="time layer3">00<span class="dots">:</span>00</div>
+  <div class="time">
+    <span class="d1" id="h1">0</span>
+    <span class="d2" id="h2">0</span>
+    <span class="colon">:</span>
+    <span class="d3" id="m1">0</span>
+    <span class="d4" id="m2">0</span>
+  </div>
 </div>
 
 <script>
@@ -74,9 +82,11 @@ function updateTime(){
   const now = new Date();
   const h = String(now.getHours()).padStart(2,'0');
   const m = String(now.getMinutes()).padStart(2,'0');
-  document.querySelectorAll('.time').forEach(el=>{
-    el.innerHTML = `${h}<span class="dots">:</span>${m}`;
-  });
+
+  document.getElementById('h1').textContent = h[0];
+  document.getElementById('h2').textContent = h[1];
+  document.getElementById('m1').textContent = m[0];
+  document.getElementById('m2').textContent = m[1];
 }
 
 document.addEventListener('click',()=>{
