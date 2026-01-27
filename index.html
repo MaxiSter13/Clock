@@ -40,14 +40,14 @@ body{
   align-items:center;
 }
 
-/* Grundcontainer */
+/* WICHTIG: Platz für Überlappung */
 .time-wrap{
   position:relative;
   font-family:'Rubik', sans-serif;
-  font-size:34vw;
+  font-size:32vw;        /* groß, aber sicher */
   line-height:1;
   white-space:nowrap;
-  transform:scale(1.02);
+  padding:0.15em;        /* verhindert Abschneiden */
 }
 
 /* Ebenen */
@@ -58,15 +58,15 @@ body{
   pointer-events:none;
 }
 
-/* Farben + minimale Offsets */
+/* Farben + Versatz wie Bild */
 .layer.back{
   color:#003f87;
-  transform:translate(-0.03em, 0.03em);
+  transform:translate(-0.04em, 0.04em);
 }
 
 .layer.mid{
   color:#0066cc;
-  transform:translate(0.015em, -0.015em);
+  transform:translate(0.02em, -0.02em);
 }
 
 .layer.front{
