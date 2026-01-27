@@ -26,34 +26,32 @@ html, body{
   -webkit-tap-highlight-color:transparent;
 }
 
-/* Zentrierung */
 #clock{
   position:fixed;
   inset:0;
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:visible;
 }
 
-/* Uhr-Container */
+/* Basisgröße – wird gleich skaliert */
 .time-wrap{
   position:relative;
   font-family:'Rubik', sans-serif;
-  font-size:30vw;      /* <<< füllt die komplette Breite */
+  font-size:500px; /* feste Basis */
   line-height:1;
   white-space:nowrap;
+  transform-origin:center;
 }
 
 /* Ebenen */
 .layer{
   position:absolute;
-  top:0;
-  left:0;
+  inset:0;
   pointer-events:none;
 }
 
-/* Überlappung + Farben wie Bild */
+/* Farben + Überlappung */
 .layer.back{
   color:#003f87;
   transform:translate(-0.06em, 0.06em);
@@ -77,7 +75,7 @@ html, body{
 <body>
 
 <div id="clock">
-  <div class="time-wrap">
+  <div class="time-wrap" id="timeWrap">
     <div class="layer back" id="t1">00<span class="colon">:</span>00</div>
     <div class="layer mid"  id="t2">00<span class="colon">:</span>00</div>
     <div class="layer front" id="t3">00<span class="colon">:</span>00</div>
@@ -85,6 +83,8 @@ html, body{
 </div>
 
 <script>
+const wrap = document.getElementById('timeWrap');
+
 function updateTime(){
   const now = new Date();
   const h = String(now.getHours()).padStart(2,'0');
@@ -94,7 +94,18 @@ function updateTime(){
   t1.innerHTML = time;
   t2.innerHTML = time;
   t3.innerHTML = time;
+
+  scaleClock();
 }
+
+function scaleClock(){
+  const vw = window.innerWidth;
+  const rect = wrap.getBoundingClientRect();
+  const scale = (vw * 0.98) / rect.width; // 98% Breite
+  wrap.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener('resize', scaleClock);
 
 document.addEventListener('click',()=>{
   if(!document.fullscreenElement){
