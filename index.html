@@ -5,9 +5,15 @@
 <title>Uhr</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --color-light:#026eff;
+  --color-dark:#0141fd;
+  --color-colon:#4c9afe;
+}
+
 *{
   margin:0;
   padding:0;
@@ -42,25 +48,59 @@ body{
 }
 
 .time{
-  font-family:'Rubik', sans-serif;
-  font-size:28vw;
+  font-family:'Fredoka', sans-serif;
+  font-weight:700;
+  font-size:32vw;
   line-height:1;
   white-space:nowrap;
   pointer-events:none;
   display:flex;
-  align-items:center;
+  align-items:baseline;
 }
 
-/* Farben */
-.d1{ color:#003366; }
-.d2{ color:#0052a3; }
-.d3{ color:#1e88ff; }
-.d4{ color:#6ec1ff; }
+.time span{
+  position:relative;
+  display:inline-block;
+  color:#1f5dff;
+  text-shadow:0 0 5vw rgba(40,100,255,0.55);
+}
 
+/* Ziffern liegen eng aneinander, leichte Überlappung */
+.d2{ margin-left:-0.05em; }
+.d3{ margin-left:-0.02em; }
+.d4{ margin-left:-0.05em; }
+
+/* Farben: hell / dunkel / hell / dunkel */
+.d1{ color:var(--color-light); }
+.d2{ color:var(--color-dark); }
+.d3{ color:var(--color-light); }
+.d4{ color:var(--color-dark); }
+
+/* Doppelpunkt: unsichtbarer Platzhalter gibt exakt die gleiche
+   Zeilenbox wie eine Ziffer vor, damit die Punkte nicht "durchfallen" */
 .colon{
-  color:#eaf4ff;
-  padding:0 0.05em;
+  position:relative;
+  display:inline-block;
+  color:transparent;
 }
+
+.colon::before{
+  content:"8";
+  visibility:hidden;
+}
+
+.colon .dot{
+  position:absolute;
+  left:50%;
+  width:0.22em;
+  height:0.22em;
+  border-radius:50%;
+  background:var(--color-colon);
+  transform:translate(-50%,-50%);
+}
+
+.colon .dot:first-child{ top:34%; }
+.colon .dot:last-child{ top:62%; }
 </style>
 </head>
 
@@ -70,9 +110,9 @@ body{
   <div class="time">
     <span class="d1" id="h1">0</span>
     <span class="d2" id="h2">0</span>
-    <span class="colon">:</span>
-    <span class="d1" id="m1">0</span>
-    <span class="d2" id="m2">0</span>
+    <span class="colon"><span class="dot"></span><span class="dot"></span></span>
+    <span class="d3" id="m1">0</span>
+    <span class="d4" id="m2">0</span>
   </div>
 </div>
 
